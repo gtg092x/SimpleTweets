@@ -27,4 +27,3 @@ This is for the Yahoo introduction to Android course Week 3. I needed a one day 
 Walkthrough of all user stories:
 
 ![Video Walkthrough](walkthru.mov)
-![Video Walkthrough Continued](walkthru2.mov)
