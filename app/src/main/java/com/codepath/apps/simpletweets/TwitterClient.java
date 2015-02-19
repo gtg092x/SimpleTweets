@@ -50,18 +50,50 @@ public class TwitterClient extends OAuthBaseClient {
     //  count=25
     //  since_id=1
     public void getHomeTimeline(AsyncHttpResponseHandler handler){
-        getHomeTimeline(1, handler);
-    }
-
-    public void getHomeTimeline(long since, AsyncHttpResponseHandler handler){
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();
         params.put("count", 25);
-        params.put("since_id", since);
+        params.put("since_id", 1);
         getClient().get(apiUrl, params, handler);
     }
 
+    public void getMentionsTimeline(JsonHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+        // Can specify query string params directly or through RequestParams.
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getUserTimeline(AsyncHttpResponseHandler handler){
+        getUserTimeline(null,handler);
+    }
+
+    public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler){
+        String apiUrl = getApiUrl("statuses/user_timeline.json");
+        // Can specify query string params directly or through RequestParams.
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        if(screenName != null){
+            params.put("screen_name", screenName);
+        }
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getUserInfo(String screenName, AsyncHttpResponseHandler handler){
+        String apiUrl;
+        RequestParams params = new RequestParams();
+        if(screenName != null){
+            params.put("screen_name", screenName);
+            apiUrl = getApiUrl("users/show.json");
+        }else{
+            apiUrl = getApiUrl("account/verify_credentials.json");
+        }
+        getClient().get(apiUrl, params, handler);
+    }
+
+    // COMPOSE TWEET
     public void postTweetHandler(String toCompose, JsonHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/update.json");
         // Can specify query string params directly or through RequestParams.
@@ -69,6 +101,4 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("status", toCompose);
         getClient().post(apiUrl, params, handler);
     }
-
-    // COMPOSE TWEET
 }

@@ -1,6 +1,7 @@
 package com.codepath.apps.simpletweets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
     // Override and setup custom template
     @Override
     public View getView(int pos, View conevertView, ViewGroup parent){
-        Tweet tweet = getItem(pos);
+        final Tweet tweet = getItem(pos);
 
         if(conevertView == null){
             conevertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
@@ -48,6 +49,14 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet>{
 
         ivProfileImage.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), ProfileActivity.class);
+                i.putExtra("screen_name", tweet.getUser().getScreenName());
+                getContext().startActivity(i);
+            }
+        });
 
         return conevertView;
     }
