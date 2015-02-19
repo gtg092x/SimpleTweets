@@ -22,10 +22,10 @@ public class UserTimelineFragment extends TweetsListFragment {
     private TwitterClient client;
     // send api request to get timeline json
     // fill list view
-    private void populateTimeline() {
+    protected void populateTimeline(int page) {
         Bundle args = getArguments();
         String screenName = args.getString("screen_name");
-        client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
+        client.getUserTimeline(screenName, page, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
@@ -46,6 +46,11 @@ public class UserTimelineFragment extends TweetsListFragment {
         args.putString("screen_name",screenName);
         userFragment.setArguments(args);
         return userFragment;
+    }
+
+    @Override
+    public void onLoadMoreRequest(int page, int totalItemsCount) {
+        populateTimeline(page);
     }
 
     @Override

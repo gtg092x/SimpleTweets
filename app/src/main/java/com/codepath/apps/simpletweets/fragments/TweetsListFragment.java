@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by mdrake on 2/17/15.
  */
-public class TweetsListFragment extends Fragment{
+public abstract class TweetsListFragment extends Fragment{
 
 
     private ArrayList<Tweet> tweets;
@@ -36,18 +36,23 @@ public class TweetsListFragment extends Fragment{
         lvTweets = (ListView) v.findViewById(R.id.lvTweets);
         lvTweets.setAdapter(aTweets);
 
-        /*lvTweets.setOnScrollListener(new EndlessScrollListener() {
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                Log.d("MORE", getSince() + "");
-                populateTimeline(getSince());
+                //Log.d("MORE", getSince() + "");
+                onLoadMoreRequest(page,totalItemsCount);
             }
-        });*/
-
-
-
+        });
 
         return v;
+    }
+
+    public abstract void onLoadMoreRequest(int page, int totalItemsCount);
+
+    protected abstract void populateTimeline(int page);
+
+    protected void populateTimeline(){
+        populateTimeline(0);
     }
 
     public void addAll(List<Tweet>tweets){

@@ -101,10 +101,11 @@ public class TimelineActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == COMPOSE_CODE) {
+        if (requestCode == COMPOSE_CODE && resultCode == RESULT_OK) {
 
-            String toCompose = data.getStringExtra("body");
+            String toCompose = data == null ? null : data.getStringExtra("body");
 
+            if(toCompose != null)
             client.postTweetHandler(toCompose, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject json) {

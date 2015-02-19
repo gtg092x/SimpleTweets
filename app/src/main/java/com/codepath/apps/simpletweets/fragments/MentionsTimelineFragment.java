@@ -22,8 +22,8 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     private TwitterClient client;
     // send api request to get timeline json
     // fill list view
-    private void populateTimeline() {
-        client.getMentionsTimeline(new JsonHttpResponseHandler(){
+    protected void populateTimeline(int page) {
+        client.getMentionsTimeline(page, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
@@ -32,10 +32,17 @@ public class MentionsTimelineFragment extends TweetsListFragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("TIMELINE", errorResponse.toString());
-
+                if(errorResponse != null)
+                    Log.d("TIMELINE", errorResponse.toString());
+                else
+                    Log.d("TIMELINE", Integer.toString(statusCode));
             }
         });
+    }
+
+    @Override
+    public void onLoadMoreRequest(int page, int totalItemsCount) {
+        populateTimeline(page);
     }
 
     @Override
